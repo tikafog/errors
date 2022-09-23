@@ -50,8 +50,8 @@ func (m *moduleError) error(err error) Index {
 		atomic.CompareAndSwapUint32(&m.count, count, count-1)
 		return v
 	}
-	triggerErrorHandler(err)
 	globalErrors.Set(idx, err)
+	triggerErrorHandler(idx, err)
 	return idx
 }
 

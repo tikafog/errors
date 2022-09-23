@@ -2,7 +2,6 @@ package merr
 
 import (
 	"fmt"
-	"log"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -19,7 +18,7 @@ var (
 	moduleNames         = make([]uint64, 1, 1024)
 	moduleErrors        = hashmap.New[uint64, ModuleError]()
 	globalErrors        = hashmap.New[Index, error]()
-	triggerErrorHandler = func(err error) {}
+	triggerErrorHandler = func(idx Index, err error) {}
 )
 
 var (
@@ -74,7 +73,6 @@ func registerModuleWithIndex(name string, idx uint32) ModuleError {
 	if v, ok := moduleErrors.GetOrInsert(key, m); ok {
 		return v
 	}
-	log.Println(len(moduleNames), m.Index())
 	atomic.StoreUint64(&moduleNames[m.Index()], key)
 	return m
 }
@@ -87,7 +85,7 @@ func RegisterModule(name string) ModuleError {
 	return registerModuleWithIndex(name, getModuleIndex())
 }
 
-func RegisterErrorHandler(fn func(err error)) {
+func RegisterErrorHandler(fn func(idx Index, err error)) {
 	triggerErrorHandler = fn
 }
 
