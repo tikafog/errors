@@ -11,7 +11,7 @@ var test2 = RegisterModule("test2")
 
 func init() {
 	RegisterErrorHandler(func(idx Index, err error) {
-		log.Println("new error", idx.ModuleName())
+		log.Println("new error", idx)
 		log.Println("new error", err.Error())
 	})
 	for i := 0; i < 100; i++ {
