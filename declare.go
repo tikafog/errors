@@ -2,6 +2,7 @@ package merr
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -15,7 +16,7 @@ type Index uint32
 var (
 	moduleIndex         uint32
 	modulesMu           sync.RWMutex
-	moduleNames         []uint64
+	moduleNames         = make([]uint64, 1, 1024)
 	moduleErrors        = hashmap.New[uint64, ModuleError]()
 	globalErrors        = hashmap.New[Index, error]()
 	triggerErrorHandler = func(err error) {}
@@ -73,6 +74,7 @@ func registerModuleWithIndex(name string, idx uint32) ModuleError {
 	if v, ok := moduleErrors.GetOrInsert(key, m); ok {
 		return v
 	}
+	log.Println(len(moduleNames), m.Index())
 	atomic.StoreUint64(&moduleNames[m.Index()], key)
 	return m
 }

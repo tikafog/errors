@@ -131,7 +131,7 @@ func TestErrorIs(t *testing.T) {
 				err:    WrapIndex(nil, 0),
 				target: WrapString(nil, "core is nil"),
 			},
-			want: true,
+			want: false,
 		},
 		{
 			name: "",
