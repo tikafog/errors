@@ -1,4 +1,4 @@
-package merr
+package errors
 
 import (
 	"fmt"
